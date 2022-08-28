@@ -4,7 +4,7 @@ name: buques_previstos_BCN
 # S'exécute tous le sjours à 22:00 '0 20 * * *'
 on:
   schedule:
-    - cron:  '0 20 * * *'
+    - cron:  '58 * * * *'
 
     
 jobs: 
