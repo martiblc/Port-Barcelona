@@ -11,11 +11,13 @@ jobs:
   buques_prev:
     # The type of runner that the job will run on
     runs-on: macos-latest
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }} 
 
     # Load repo and install R
     steps:
-    - uses: actions/checkout@main
-    - uses: r-lib/actions/setup-r@main
+    - uses: actions/checkout@master
+    - uses: r-lib/actions/setup-r@master
 
     # Set-up R
     - name: Install packages
