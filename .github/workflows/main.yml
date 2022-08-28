@@ -1,33 +1,34 @@
-# Import et analyse journaliere
-name: buques_prev
+# This is a basic workflow to help you get started with Actions
 
-# S'exécute tous le sjours à 22:00 '0 20 * * *'
+name: Previsiones llegadas y salidas buques
+
+# Controls when the workflow will run
 on:
   schedule:
-    - cron:  '25 * * * *'
-    
-    
+    - cron:  '40 * * * *'
+#on:
+#  push:
+#    branches:
+#      - main
 jobs: 
-  buques_prev:
+  buquesprev:
     # The type of runner that the job will run on
     runs-on: macos-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }} 
-
     # Load repo and install R
     steps:
     - uses: actions/checkout@master
     - uses: r-lib/actions/setup-r@master
 
-    # Set-up R
+     # Set-up R
     - name: Install packages
       run: |
-        R -e 'install.packages("tidyverse")'
-        R -e 'install.packages("slider")'
-        R -e 'install.packages("lubridate")'
+        install.packages(c("tidyverse","lubridate"),type="binary")
+      shell: Rscript {0}
 
     # Run R script
-    - name: Buques-prev
+    - name: buquesprev
       run: Rscript buques_prev.R
       
  # Add new files in data folder, commit along with other modified files, push
@@ -35,8 +36,8 @@ jobs:
       run: |
         git config --local user.name actions-user
         git config --local user.email "actions@github.com"
-        git add data/*
-        git commit -am "GH ACTION Headlines $(date)"
+        git add data_ukraine_hcr/*
+        git commit -am "GH ACTION OK $(date)"
         git push origin main
       env:
         REPO_KEY: ${{secrets.GITHUB_TOKEN}}
