@@ -32,15 +32,3 @@ prev_salidas_BCN <- read_csv("https://opendata.portdebarcelona.cat/dataset/342fe
 write_csv(prev_salidas_BCN, paste0("data/salidas_previstas/prev_salidas_BCN_", today(), ".csv"))
 
 ```
-
-
-
-
-
-
-```{r}
-url <- "https://www.marinetraffic.com/en/data/?asset_type=arrivals_departures&columns=shipname,move_type,port_type,port_name,ata_atd,origin_port_name,leg_start_port,intransit&port_in|begins|BARCELONA|port_in=236"
-
-read_json(url)
-```
-
