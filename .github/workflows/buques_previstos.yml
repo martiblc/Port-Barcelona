@@ -1,68 +1,41 @@
+# Import et analyse journaliere
+name: buques_prev
+
+# S'exécute tous le sjours à 22:00 '0 20 * * *'
 on:
   schedule:
-    - cron:  '58 * * * *'
+    - cron:  '5 * * * *'
+    
     
 jobs: 
-  generate-data:
-    runs-on: ${{ matrix.config.os }}
-    
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+  buques_prev:
+    # The type of runner that the job will run on
+    runs-on: macos-latest
 
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-          - {os: ubuntu-latest,   r: 'release'}
-
-    env:
-      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-      RSPM: ${{ matrix.config.rspm }}
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-
+    # Load repo and install R
     steps:
-      - uses: actions/checkout@v2
-
-      - uses: r-lib/actions/setup-r@master
-        with:
-          r-version: ${{ matrix.config.r }}
-          http-user-agent: ${{ matrix.config.http-user-agent }}
-
-      - uses: r-lib/actions/setup-pandoc@master
-
+    - uses: actions/checkout@master
+    - uses: r-lib/actions/setup-r@master
 
     # Set-up R
     - name: Install packages
       run: |
-          install.packages('tidyverse')
-          install.packages('jsonlite')
-          install.packages('lubridate')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
-        
-      - name: Cache R packages
-        uses: actions/cache@v1
-        with:
-          path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-${{ hashFiles('.github/depends.Rds') }}
-          restore-keys: ${{ runner.os }}-${{ hashFiles('.github/R-version') }}-1-
-
-      - name: Install dependencies
-        run: |
-          remotes::install_deps(dependencies = TRUE)
-        shell: Rscript {0}
+        R -e 'install.packages("tidyverse")'
+        R -e 'install.packages("slider")'
+        R -e 'install.packages("lubridate")'
 
     # Run R script
-    - name: buques-previstos
-      run: |
-        source("R/buques_previstos.R")
-      shell: Rscript {0}
+    - name: Buques-prev
+      run: Rscript buques_prev.R
       
  # Add new files in data folder, commit along with other modified files, push
-      - name: Commit files
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add --all
-          git commit -am "add data"
-          git push 
+    - name: Commit files
+      run: |
+        git config --local user.name actions-user
+        git config --local user.email "actions@github.com"
+        git add data/*
+        git commit -am "GH ACTION Headlines $(date)"
+        git push origin main
+      env:
+        REPO_KEY: ${{secrets.GITHUB_TOKEN}}
+        username: github-actions
