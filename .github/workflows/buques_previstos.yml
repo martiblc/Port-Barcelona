@@ -1,11 +1,6 @@
-# Import et analyse journaliere
-name: buques_previstos_BCN
-
-# S'exécute tous le sjours à 22:00 '0 20 * * *'
 on:
   schedule:
     - cron:  '58 * * * *'
-
     
 jobs: 
   generate-data:
