@@ -5,7 +5,7 @@ name: Previsiones llegadas y salidas buques
 # Controls when the workflow will run
 on:
   schedule:
-    - cron:  '18 * * * *'
+    - cron:  '00 22 * * *'
 #on:
 #  push:
 #    branches:
