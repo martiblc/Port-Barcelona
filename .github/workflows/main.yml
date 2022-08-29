@@ -4,7 +4,7 @@ name: Previsiones llegadas y salidas buques
 # S'exécute tous le sjours à 
 on:
   schedule:
-    - cron:  '0 11 * * *'
+    - cron:  '0 9 * * *'
     
     
 jobs: 
