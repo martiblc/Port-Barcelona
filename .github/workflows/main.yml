@@ -1,10 +1,9 @@
-# Import
 name: Previsiones llegadas y salidas buques
 
-# S'exécute tous le sjours à 
+# Todos los dias a las 5:00 am 
 on:
   schedule:
-    - cron:  '0 9 * * *'
+    - cron:  '0 5 * * *'
     
     
 jobs: 
