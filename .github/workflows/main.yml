@@ -1,31 +1,27 @@
-# This is a basic workflow to help you get started with Actions
-
+# Import
 name: Previsiones llegadas y salidas buques
 
-# Controls when the workflow will run
+# S'exécute tous le sjours à 
 on:
   schedule:
-    - cron:  '00 22 * * *'
-#on:
-#  push:
-#    branches:
-#      - main
+    - cron:  '0 11 * * *'
+    
+    
 jobs: 
-  buquesprev:
+  covid-auto:
     # The type of runner that the job will run on
     runs-on: macos-latest
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }} 
+
     # Load repo and install R
     steps:
     - uses: actions/checkout@master
     - uses: r-lib/actions/setup-r@master
 
-     # Set-up R
+    # Set-up R
     - name: Install packages
       run: |
-        install.packages(c("tidyverse","lubridate"),type="binary")
-      shell: Rscript {0}
+        R -e 'install.packages("tidyverse")'
+        R -e 'install.packages("lubridate")'
 
     # Run R script
     - name: buquesprev
@@ -37,7 +33,7 @@ jobs:
         git config --local user.name actions-user
         git config --local user.email "actions@github.com"
         git add data/*
-        git commit -am "GH ACTION OK $(date)"
+        git commit -am "GH ACTION Headlines $(date)"
         git push origin main
       env:
         REPO_KEY: ${{secrets.GITHUB_TOKEN}}
